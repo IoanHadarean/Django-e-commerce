@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -29,12 +29,19 @@ def login(request):
             if user:
                 auth.login(user=user, request=request)
                 messages.success(request, "You have successfully logged in!")
-                return redirect(reverse('index'))
+                
+                if request.GET and request.GET['next'] !='':
+                    next = request.GET['next']
+                    return HttpResponseRedirect(next)
+                else:
+                    return redirect(reverse('index'))
             else:
                 login_form.add_error(None, "You username or password is incorrect")
     else:
         login_form = UserLoginForm()
-    return render(request, 'login.html', {"login_form": login_form})
+        
+    args = {'login_form': login_form, 'next': request.GET.get('next', '')}
+    return render(request, 'login.html', args)
     
 def registration(request):
     """Render the registration page"""
@@ -58,7 +65,9 @@ def registration(request):
                 messages.error(request, 'Unable to register your account at this time')
     else:        
         registration_form = UserRegistrationForm()
-    return render(request, 'registration.html', {'registration_form': registration_form})
+        
+    args = {'registration_form': registration_form}
+    return render(request, 'registration.html', args)
     
 def user_profile(request):
     """The user's profile page"""
