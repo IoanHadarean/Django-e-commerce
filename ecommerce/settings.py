@@ -28,7 +28,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [os.environ.get('C9_HOSTNAME'),
-                 '4ab1bf82375a461ea884889edad31bf3.vfs.cloud9.us-east-1.amazonaws.com',]
+                 '4ab1bf82375a461ea884889edad31bf3.vfs.cloud9.us-east-1.amazonaws.com',
+                 'ecommerce-application-django.herokuapp.com']
 
 
 # Application definition
